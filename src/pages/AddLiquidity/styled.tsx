@@ -5,7 +5,7 @@ import Input from 'components/NumericalInput'
 import { BodyWrapper } from 'pages/AppBody'
 
 export const PageWrapper = styled(BodyWrapper)<{ wide: boolean }>`
-  max-width: ${({ wide }) => (wide ? '880px' : '480px')};
+  max-width: ${({ wide }) => (wide ? '1040px' : '480px')};
   width: 100%;
 
   padding: ${({ wide }) => (wide ? '10px' : '0')};
