@@ -1,11 +1,12 @@
 import { Currency } from '@uniswap/sdk-core'
+import EthereumLogo from 'assets/images/ethereum-logo.png'
+import MaticLogo from 'assets/svg/matic-token-icon.svg'
 import { SupportedChainId } from 'constants/chains'
+import useHttpLocations from 'hooks/useHttpLocations'
 import React, { useMemo } from 'react'
+import { WrappedTokenInfo } from 'state/lists/wrappedTokenInfo'
 import styled from 'styled-components/macro'
 
-import EthereumLogo from '../../assets/images/ethereum-logo.png'
-import useHttpLocations from '../../hooks/useHttpLocations'
-import { WrappedTokenInfo } from '../../state/lists/wrappedTokenInfo'
 import Logo from '../Logo'
 
 type Network = 'ethereum' | 'arbitrum' | 'optimism'
@@ -34,19 +35,27 @@ export const getTokenLogoURL = (
   }
 }
 
-const StyledEthereumLogo = styled.img<{ size: string }>`
+const StyledNativeLogo = styled.img<{ size: string }>`
   width: ${({ size }) => size};
   height: ${({ size }) => size};
-  box-shadow: 0px 6px 10px rgba(0, 0, 0, 0.075);
-  border-radius: 24px;
+  background: radial-gradient(white 50%, #ffffff00 calc(75% + 1px), #ffffff00 100%);
+
+  border-radius: 50%;
+  -mox-box-shadow: 0 0 1px white;
+  -webkit-box-shadow: 0 0 1px white;
+  box-shadow: 0 0 1px white;
+  border: 0px solid rgba(255, 255, 255, 0);
 `
 
 const StyledLogo = styled(Logo)<{ size: string }>`
   width: ${({ size }) => size};
   height: ${({ size }) => size};
-  border-radius: ${({ size }) => size};
-  box-shadow: 0px 6px 10px rgba(0, 0, 0, 0.075);
-  background-color: ${({ theme }) => theme.white};
+  background: radial-gradient(white 50%, #ffffff00 calc(75% + 1px), #ffffff00 100%);
+  border-radius: 50%;
+  -mox-box-shadow: 0 0 1px black;
+  -webkit-box-shadow: 0 0 1px black;
+  box-shadow: 0 0 1px black;
+  border: 0px solid rgba(255, 255, 255, 0);
 `
 
 export default function CurrencyLogo({
@@ -79,7 +88,17 @@ export default function CurrencyLogo({
   }, [currency, uriLocations])
 
   if (currency?.isNative) {
-    return <StyledEthereumLogo src={EthereumLogo} alt="ethereum logo" size={size} style={style} {...rest} />
+    let nativeLogoUrl: string
+    switch (currency.chainId) {
+      case SupportedChainId.POLYGON_MUMBAI:
+      case SupportedChainId.POLYGON:
+        nativeLogoUrl = MaticLogo
+        break
+      default:
+        nativeLogoUrl = EthereumLogo
+        break
+    }
+    return <StyledNativeLogo src={nativeLogoUrl} alt="ethereum logo" size={size} style={style} {...rest} />
   }
 
   return <StyledLogo size={size} srcs={srcs} alt={`${currency?.symbol ?? 'token'} logo`} style={style} {...rest} />
